@@ -81,6 +81,9 @@ devin-issues scope 42
 
 # Wait for scoping to complete
 devin-issues scope 42 --wait
+
+# Scope an issue from an external repository
+devin-issues scope 35656 --source-repo facebook/react
 ```
 
 ### Execute an Issue

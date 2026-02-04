@@ -151,12 +151,25 @@ def cmd_show(args, config: Config):
 
 def cmd_scope(args, config: Config):
     """Trigger a scoping session for an issue."""
-    github = GitHubClient(config)
+    source_repo = getattr(args, 'source_repo', None)
+
+    if source_repo:
+        source_config = Config.from_args(
+            devin_api_key=config.devin_api_key,
+            github_token=config.github_token,
+            github_repo=source_repo,
+        )
+        github = GitHubClient(source_config)
+    else:
+        github = GitHubClient(config)
+
     devin = DevinClient(config)
 
     try:
         issue = github.get_issue(args.issue_number)
+        repo_name = source_repo or config.github_repo
         print(f"\nStarting scoping session for Issue #{issue.number}: {issue.title}")
+        print(f"Repository: {repo_name}")
         print("This may take a few minutes...")
 
         result = devin.trigger_scoping_session(issue, wait=args.wait)
@@ -303,6 +316,10 @@ def main():
         "-w",
         action="store_true",
         help="Wait for the session to complete",
+    )
+    scope_parser.add_argument(
+        "--source-repo",
+        help="Source repository for the issue (owner/repo format). Use to scope issues from external repos.",
     )
 
     # Execute command
