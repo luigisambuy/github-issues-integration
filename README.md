@@ -15,13 +15,20 @@ This integration provides three main capabilities:
 From the repository root:
 
 ```bash
-pip install -e .
+poetry install
 ```
 
-Or install the requests dependency directly:
+Then run commands with:
 
 ```bash
-pip install requests>=2.28.0
+poetry run devin-issues <command>
+```
+
+Or activate the virtual environment first:
+
+```bash
+poetry shell
+devin-issues <command>
 ```
 
 ## Configuration
